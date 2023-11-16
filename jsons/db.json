@@ -2,5 +2,9 @@
 	"hi":{
 		"A":["127.0.0.1:443"],
 		"CNAME":["hello","www.hello"]
+	},
+	"hello": {
+		"A": ["127.0.0.1:443"],
+		"CNAME":["hello","www.hello"]
 	}
 }
