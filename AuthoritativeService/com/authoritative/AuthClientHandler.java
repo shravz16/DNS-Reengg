@@ -3,6 +3,7 @@ package com.authoritative;
 import com.dns.dnsresolver.DNSQuery;
 import com.handler.client.ClientHandler;
 import com.handler.client.PrintLn;
+import com.redis.utils.RedisServer;
 import com.utils.file.CommonFileReader;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,13 +26,21 @@ public class AuthClientHandler implements ClientHandler{
 
     private void searchAndReturn(DNSQuery dnsQuery) {
         String domainName= dnsQuery.getDomainName().substring(0,dnsQuery.getDomainName().lastIndexOf("."));
+        RedisServer rs=RedisServer.getInstance();
+        String value=null;
+        if(rs.hasKey(domainName)){
 
-        JSONObject jsonObjectn=json.getJSONObject(domainName);
-        JSONArray array=jsonObjectn.getJSONArray(dnsQuery.getType());
-
+            value=rs.getKey(domainName);
+        }
+        else {
+            JSONObject jsonObjectn = json.getJSONObject(domainName);
+            JSONArray array = jsonObjectn.getJSONArray(dnsQuery.getType());
+            value=array.getString(0);
+            rs.setKey(domainName,value);
+        }
         try {
 
-            printLn.write(array.getString(0).getBytes(StandardCharsets.UTF_8));
+            printLn.write(value.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

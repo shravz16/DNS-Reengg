@@ -97,7 +97,7 @@ public class DNSClientHandler implements ClientHandler {
             bytes = new byte[1024];
             int k=authIp.read(bytes);
             System.out.println(new String(bytes));
-            printLn.write((new String(bytes).trim()+" is the IP for "+query.getDomainName()).getBytes());
+            printLn.write((new String(bytes).trim()+" is the IP for "+query.getDomainName()+"\r\n").getBytes());
 
         } catch (IOException e) {
             throw new RuntimeException(e);
